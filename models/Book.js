@@ -3,13 +3,13 @@ const Bookschema = new mongoose.Schema({
     title:{ 
         type:String,
         required:[true,'Book title is required'], 
-        trime:true,
+        trim:true,
         maxLength:[100,"Length cannot be more than 100"],
     },
     author:{ 
         type:String,
         required:[true,'Author name is required'], 
-        trime:true,
+        trim:true,
     },
     genre:{
         type:String, 
@@ -27,4 +27,6 @@ const Bookschema = new mongoose.Schema({
     }
 
 }); 
+
+
 module.exports=mongoose.model('Book',Bookschema);

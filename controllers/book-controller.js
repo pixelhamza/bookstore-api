@@ -13,14 +13,14 @@ const getAllBooks=async(req,res)=>{
             res.status(404).json({
                 success:false,
                 message:"Unable to fetch books,no books available"
-            })
+            });
         }
 
     }catch(e){
         console.log(e);
         res.status(500).json({
             message:"Something went wrong"
-        })
+        });
     }
 
 
@@ -42,9 +42,9 @@ const getBookById=async(req,res)=>{
         res.json( {
             success:true, 
             data:singleBook
-        })
+        });
 
-    }catch(e){
+    }catch(error){
         res.status(500).json({
             success: false,
             message: error.message
@@ -77,7 +77,7 @@ const updateBook=async(req,res)=>{
     const updatedData=req.body; 
     const Bookid=req.params.id;
     const updatedBook= await Book.findByIdAndUpdate(
-    bookId,updateBook,
+    Bookid,updatedData,
     {new:true,}
     );
        if (!updatedBook) {
@@ -109,6 +109,10 @@ const deleteBook=async(req,res)=>{
             message:"Unable to delete Book, Book does not exist"
         })
     }
+    res.status(200).json({
+        success:true,
+        message:"Book Deleted Successfully"
+    })
     }catch (error) {
         res.status(500).json({
             success: false,
