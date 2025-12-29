@@ -122,13 +122,41 @@ const deleteBook=async(req,res)=>{
 
 };
 
-const getBookbyQuery=async(req,res)=>{
-    // to be implmented later
-}
+const getBooksBySearch = async (req, res) => {
+  try {
+    const { q } = req.query;
+
+    if (!q) {
+      return res.status(400).json({
+        success: false,
+        message: "Search query is required"
+      });
+    }
+
+    const books = await Book.find({
+      $or: [
+        { title: { $regex: q, $options: "i" } },
+        { author: { $regex: q, $options: "i" } }
+      ]
+    });
+
+    res.status(200).json({
+      success: true,
+      data: books
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
+  }
+};
+
 
 module.exports={getAllBooks,
     getBookById,
     updateBook,
     deleteBook,
-    createBook
+    createBook,
+    getBooksBySearch
 }
