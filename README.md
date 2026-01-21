@@ -36,10 +36,10 @@ This is a simple backend project for a **Bookstore API** made to practice real-w
 ```
 src/
   controllers/
+  database/
   routes/
   models/
   middlewares/
-  services/
   utils/
 ```
 
