@@ -1,13 +1,30 @@
 const Book=require('../models/Book');
+const redis=require('../utils/redisClient');
 
 const getAllBooks=async(req,res)=>{ 
     try{
+        const cacheKey=`books:all`; 
+        const cachedBooks=redis.get(cacheKey); 
+        if(cachedBooks){
+            return res.status(200).json({
+                success: true,
+                message: "List Sent successfully (cache)",
+                data: JSON.parse(cachedBooks)
+            });
+        }
         const findBooks=await Book.find({});
+
+        await redis.setEx(
+            cacheKey,
+            500, 
+            JSON.stringify(findBooks));
+
             res.status(200).json({
                 success:true,
                 message:"List Sent successfully",
                 data:findBooks
             });
+
     }catch(e){
         console.log(e);
         res.status(500).json({
@@ -73,6 +90,7 @@ const updateBook=async(req,res)=>{
     try{
     const updatedData=req.body; 
     const Bookid=req.params.id;
+
     const updatedBook= await Book.findByIdAndUpdate(
     Bookid,updatedData,
     {new:true,}
